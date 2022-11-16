@@ -35,3 +35,8 @@
     cursor: pointer;
     border: 1px solid black;
 }
+
+#info{
+    position: absolute;
+    margin-top: 360px;
+}
