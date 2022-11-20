@@ -1,97 +1,102 @@
 let isPlayerX = true;
-//leer datos
+let winner;
+
+info("Comienza ❎");
+
+const startClick = () => {
+  let boxes = document.querySelectorAll(".tablero div"); //esta funcion asigna los valores predeterminados al comienzo de la partida
+  boxes.forEach(function (box) {
+    box.innerHTML = "";
+  });
+
+  if (isPlayerX) {
+    info("Comienza ❎ ");
+  } else {
+    info("Comienza 🅾 ");
+  }
+
+  winner = undefined;
+};
+document.getElementById("btnStart").addEventListener("click", startClick);
 
 const playerClick = (event) => {
-    
+  if (!winner) {
+    //winner undefined para que entre aqui
     var box = event.target;
-    var boxId = box.id;
     var boxValue = box.innerHTML;
-  
-    markBox(box);
-    let ruleWinner = checkWinner(boxValue);
-    if(ruleWinner){
-        console.log(ruleWinner);
+
+    mark(box);
+    let result = checkWinner(boxValue);
+    winner = result; //si winner tiene un valor es porque hay ganador
+    if (winner) {
+      // console.log(`las casillas ${ruleWinner} son las ganadoras`);
+      info("Tenemos un ganador!!!");
     }
-  };
-
-var markBox = (box) => {
-
-  if (box.innerHTML !== "" || box.innerHTML.length > 0) {
-    console.log(`La casilla ${box.id} ya fue utilizada.`);
-    return;
   }
-
-  if (isPlayerX == true) {
-    box.innerHTML = "X";
+};
+//marcar casilla
+const mark = (box) => {
+  if (box.innerHTML !== "") {
+    alert(`La casilla ${box.id} ya fue utilizada.`);
   } else {
-    box.innerHTML = "O";
+    if (isPlayerX == true) {
+      box.innerHTML = "❎";
+      info("El turno es de 🅾");
+    } else {
+      box.innerHTML = "🅾";
+      info("El turno es de ❎");
+    }
+    isPlayerX = !isPlayerX;
   }
-//   console.log(isPlayerX)
-  isPlayerX = !isPlayerX;
-//   console.log(isPlayerX)
 };
+//regla ganadora
+const rules = [];
+rules.push(["b11", "b12", "b13"]);
+rules.push(["b21", "b22", "b23"]);
+rules.push(["b31", "b32", "b33"]);
+rules.push(["b11", "b21", "b31"]);
+rules.push(["b12", "b22", "b32"]);
+rules.push(["b13", "b23", "b33"]);
+rules.push(["b11", "b22", "b33"]);
+rules.push(["b13", "b22", "b31"]);
 
-let box11Value = document.getElementById("11").innerHTML;
-let box12Value = document.getElementById("12").innerHTML;
-let box13Value = document.getElementById("13").innerHTML;
+const checkWinner = () => {
+  let result;
+  for (let i = 0; i < rules.length; i++) {
+    const rule = rules[i];
+    let initialBoxValue;
 
-let box21Value = document.getElementById("21").innerHTML;
-let box22Value = document.getElementById("22").innerHTML;
-let box23Value = document.getElementById("23").innerHTML;
+    for (let j = 0; j < rule.length; j++) {
+      const boxId = rule[j];
 
-let box31Value = document.getElementById("31").innerHTML;
-let box32Value = document.getElementById("32").innerHTML;
-let box33Value = document.getElementById("33").innerHTML;
-
-var rule1 = [11, 12, 13];
-var rule2 = [21, 22, 23];
-var rule3 = [31, 32, 33];
-var rule4 = [11, 21, 31];
-var rule5 = [12, 22, 32];
-var rule6 = [13, 23, 33];
-var rule7 = [11, 22, 33];
-var rule8 = [13, 22, 31];
-
-var rules = [rule1, rule2, rule3, rule4, rule5, rule6, rule7, rule8];
-
-var checkWinner = (boxId) => {
-
-    let ruleWinner;
-    for (let i = 0; i < rules.length; i++) {
-
-        const rule = rules[i];  
-        let initialBoxValue;
-
-        for (let j = 0; j < rule.length; j++) {
-
-            const id = rule[j];
-            
-            if(j == 0) {
-
-                initialBoxValue = document.getElementById(id).innerHTML
-                if(initialBoxValue == "") {
-                    break;
-                }
-
-                continue;
-            }
-            
-            let currentBoxValue = document.getElementById(id).innerHTML
-            if(currentBoxValue == "" || initialBoxValue != currentBoxValue){
-                break;
-            }
-
-            if(j == (rule.length - 1)){
-                ruleWinner = rule; 
-            }
+      if (j == 0) {
+        //tomamos el primer elemento para compararlo con los otros dos
+        initialBoxValue = document.getElementById(boxId).innerHTML;
+        if (initialBoxValue == "") {
+          break; //breack rompemos el bucle se sale de la ejecucion al mas externo
         }
 
-        if(ruleWinner){
-            break;
-        }
+        continue; //para que vaya a la siguiente iteracion
+      }
+
+      let currentBoxValue = document.getElementById(boxId).innerHTML;
+      if (currentBoxValue == "" || initialBoxValue != currentBoxValue) {
+        break; //se sale del bucle y vamos al mas externo
+      }
+
+      if (j == rule.length - 1) {
+        result = rule;
+      }
     }
 
-    return ruleWinner;
-    
+    if (result) {
+      break;
+    }
+  }
+
+  return result;
 };
 
+function info(mensaje) {
+  document.getElementById("info").innerHTML = mensaje;
+}
