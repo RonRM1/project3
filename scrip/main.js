@@ -29,11 +29,21 @@ const playerClick = (event) => {
     let result = checkWinner(boxValue);
     winner = result; //si winner tiene un valor es porque hay ganador
     if (winner) {
-      // console.log(`las casillas ${ruleWinner} son las ganadoras`);
-      info("Tenemos un ganador!!!");
+      // console.log(winner[0]);
+
+      let boxValue = document.getElementById(winner[0]).innerText;
+      console.log(boxValue);
+      let playerName;
+      if (boxValue == "❎") {
+        playerName = document.getElementById("name2").value;
+      } else {
+        playerName = document.getElementById("name1").value;
+      }
+      info(`Ha ganado ${playerName} la partida`);
     }
   }
 };
+
 //marcar casilla
 const mark = (box) => {
   if (box.innerHTML !== "") {
@@ -41,16 +51,19 @@ const mark = (box) => {
   } else {
     if (isPlayerX == true) {
       box.innerHTML = "❎";
-      info("El turno es de 🅾");
+      let player1 = document.getElementById("name1").value;
+      info("El turno es de 🅾: " + player1);
     } else {
+      let player2 = document.getElementById("name2").value;
       box.innerHTML = "🅾";
-      info("El turno es de ❎");
+      info("El turno es de ❎: " + player2);
     }
     isPlayerX = !isPlayerX;
   }
 };
 //regla ganadora
 const rules = [];
+
 rules.push(["b11", "b12", "b13"]);
 rules.push(["b21", "b22", "b23"]);
 rules.push(["b31", "b32", "b33"]);
@@ -73,7 +86,7 @@ const checkWinner = () => {
         //tomamos el primer elemento para compararlo con los otros dos
         initialBoxValue = document.getElementById(boxId).innerHTML;
         if (initialBoxValue == "") {
-          break; //breack rompemos el bucle se sale de la ejecucion al mas externo
+          break;
         }
 
         continue; //para que vaya a la siguiente iteracion
@@ -81,7 +94,7 @@ const checkWinner = () => {
 
       let currentBoxValue = document.getElementById(boxId).innerHTML;
       if (currentBoxValue == "" || initialBoxValue != currentBoxValue) {
-        break; //se sale del bucle y vamos al mas externo
+        break;
       }
 
       if (j == rule.length - 1) {
@@ -100,3 +113,4 @@ const checkWinner = () => {
 function info(mensaje) {
   document.getElementById("info").innerHTML = mensaje;
 }
+
