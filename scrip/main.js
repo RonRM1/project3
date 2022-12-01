@@ -4,6 +4,8 @@ let winner;
 info("Comienza ❎");
 
 const startClick = () => {
+  var e = document.querySelector(".ganar");
+  e.style = "display: none";
   let boxes = document.querySelectorAll(".tablero div"); //esta funcion asigna los valores predeterminados al comienzo de la partida
   boxes.forEach(function (box) {
     box.innerHTML = "";
@@ -28,18 +30,22 @@ const playerClick = (event) => {
     mark(box);
     let result = checkWinner(boxValue);
     winner = result; //si winner tiene un valor es porque hay ganador
+
     if (winner) {
       // console.log(winner[0]);
 
       let boxValue = document.getElementById(winner[0]).innerText;
       console.log(boxValue);
       let playerName;
+      var e = document.querySelector(".ganar");
+      e.style = "display: block";
+
       if (boxValue == "❎") {
         playerName = document.getElementById("name2").value;
       } else {
         playerName = document.getElementById("name1").value;
       }
-      info(`Ha ganado ${playerName} la partida`);
+      info(`Ha ganado ${playerName} la partida!!!`);
     }
   }
 };
@@ -111,6 +117,7 @@ const checkWinner = () => {
 };
 
 function info(mensaje) {
-  document.getElementById("info").innerHTML = mensaje;
+  document.querySelectorAll(".alert-info").forEach((element) => {
+    element.innerHTML = mensaje;
+  });
 }
-
