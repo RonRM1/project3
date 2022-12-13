@@ -45,7 +45,7 @@ const playerClick = (event) => {
       } else {
         playerName = document.getElementById("name1").value;
       }
-      info(`Ha ganado ${playerName} la partida!!!`);
+      info(`Ha ganado ${playerName}${boxValue} la partida!!!`);
     }
   }
 };
